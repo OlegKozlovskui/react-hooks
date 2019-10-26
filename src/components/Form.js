@@ -3,8 +3,7 @@ import { useFrom } from '../hooks/useForm';
 
 const Form = () => {
   const [values, handleChange] = useFrom({ email: '', password: '' });
-  console.log(handleChange);
-
+  
   return (
     <form>
       <input
