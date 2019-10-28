@@ -1,20 +1,35 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useMemo } from 'react';
+
 import './App.css';
-import Form from './components/Form';
-import Hello from './components/Hello';
+import { useFetch } from './hooks/useFetch';
+
+function computeLongestWord(data) {
+  if (!data) {
+    return [];
+  }
+
+  let longestWord = '';
+
+  data.forEach(sentence => sentence.split(' ').forEach(word => {
+    if (word.length > longestWord.length) {
+      longestWord = word;
+    }
+  }));
+
+  return longestWord;
+};
 
 function App() {
   const [count, setCount] = useState(0);
+  const { data } = useFetch('https://raw.githubusercontent.com/ajzbc/kanye.rest/master/quotes.json');
 
-  const increment = useCallback(() => {
-    setCount(c => c + 1);
-  }, [setCount]);
+  const longestWord = useMemo(() => computeLongestWord(data), [data]);
 
   return (
     <div className="App">
-      <Form />
-      <Hello increment={increment}/>
       <em>Count:{count}</em>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+      {longestWord}
     </div>
   );
 }
